@@ -98,32 +98,47 @@
 -- order by 2 desc
 
 -- 14.	What percentage of names are "unisex" - that is what percentage of names have been used both for boys and for girls?
---REVISIT
-select --name, distinct(gender)
-from names
-group by name, gender
-having count(name) >1
-order by name
-
-
-select (sum(Unisex_names ) * 100.0)/ count(*) 
-from(
-
-	select name, Case when count(distinct(gender)) > 1 then 1
-			end AS Unisex_names
-	from names
-	group by name	) as Sub1
-	--where sub1.Unisex_names =1
+-- ANS= 10.94 % names are Unisex
+SELECT (SUM(Unisex_names ) * 100.0)/ COUNT(*) 
+FROM(
+		SELECT name, Case when count(distinct(gender)) > 1 then 1
+						end AS Unisex_names
+		FROM names
+		GROUP BY name	
+	) as Sub1
 	
-
-
-					   
+	
+   
 					   
 
 -- 15.	How many names have made an appearance in every single year since 1880?
+--ANS = 921 names
+
+--part 1 - Validate names have count year = 139
+SELECT DISTINCT name, count(distinct year) as Dist_Year
+FROM names
+GROUP BY name
+HAVING COUNT(DISTINCT year) = (SELECT COUNT(DISTINCT year) FROM names)
+
+
+--part 2- Get the count of names
+SELECT COUNT(name)
+FROM
+(
+	SELECT DISTINCT name
+	FROM names
+	GROUP BY name
+	HAVING COUNT(DISTINCT year) = (SELECT COUNT(DISTINCT year) FROM names)
+	) AS Sub1
 
 -- 16.	How many names have only appeared in one year?
 -- 17.	How many names only appeared in the 1950s?
 -- 18.	How many names made their first appearance in the 2010s?
 -- 19.	Find the names that have not be used in the longest.
 -- 20.	Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
+
+
+
+
+
+
