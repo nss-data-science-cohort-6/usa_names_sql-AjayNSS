@@ -132,8 +132,47 @@ FROM
 	) AS Sub1
 
 -- 16.	How many names have only appeared in one year?
+--ANS = 21123
+SELECT COUNT(name)
+FROM
+(
+	SELECT DISTINCT name, count(distinct year) as Dist_Year
+	FROM names
+	GROUP BY name
+	HAVING COUNT(DISTINCT year) = 1
+) AS Sub
+ 
+
+
+
 -- 17.	How many names only appeared in the 1950s?
+--ANS = 661
+Select count( Distinct Name)
+from names
+where name not in
+(
+	SELECT DISTINCT YEAR
+	FROM names
+	WHERE year <  1950 OR year > 1959
+)
+And Year between 1950 and 1959
+
 -- 18.	How many names made their first appearance in the 2010s?
+--ANS = 11270
+	
+Select count(  Distinct Name)
+from names
+where name not in
+(
+SELECT DISTINCT Name
+	FROM names
+	WHERE year < 2010 
+	
+)
+
+
+
+
 -- 19.	Find the names that have not be used in the longest.
 -- 20.	Come up with a question that you would like to answer using this dataset. Then write a query to answer this question.
 
